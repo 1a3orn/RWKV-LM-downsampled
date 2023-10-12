@@ -314,7 +314,7 @@ class Block(nn.Module):
 
     def forward(self, x):
 
-        og_shape = x.shape
+        res = x
 
         if self.downsample:
             x = x[:, ::self.N, :]
@@ -328,9 +328,10 @@ class Block(nn.Module):
         x = x + self.ffn(self.ln2(x))
 
         if self.downsample:
-            upsampled = torch.zeros(og_shape, device=x.device)
+            upsampled = torch.zeros_like(y)
             upsampled[:, ::self.N, :] = x
-            x = x + upsampled
+            res = res + upsampled
+            x = res
 
         return x
 
