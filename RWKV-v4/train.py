@@ -72,7 +72,7 @@ os.environ['RWKV_DEEPSPEED'] = '1' # Use DeepSpeed? 0 = False, 1 = True
 if int(os.environ['RWKV_NUM_GPUS']) == 1: # Usually you don't need DeepSpeed for 1 GPU training.
     os.environ['RWKV_DEEPSPEED'] = '0'    # However, sometimes DeepSpeed saves VRAM even for 1 GPU training. So you shall try it.
 
-os.environ['USE_WANDB'] = '0' # wandb logging. 0 = False, 1 = True
+os.environ['USE_WANDB'] = '1' # wandb logging. 0 = False, 1 = True
 
 ########################################################################################################
 # Step 2: set model details
@@ -81,7 +81,7 @@ os.environ['USE_WANDB'] = '0' # wandb logging. 0 = False, 1 = True
 EPOCH_BEGIN = 0 # begins with miniEpoch = EPOCH_BEGIN
 LOAD_MODEL = False # shall we load the #EPOCH_BEGIN model and continue the training from it?
 
-n_layer = 6
+n_layer = 10
 n_embd = 512
 ctx_len = 1024 # increase T_MAX in src/model.py if your ctx_len is longer
 
@@ -111,7 +111,7 @@ if EXPRESS_PILE_MODE:
 ########################################################################################################
 
 # if you see "CUDA out of memory", reduce batch_size. Use nvidia-smi to find the highest value for your GPU.
-batch_size = 12 * int(os.environ['RWKV_NUM_GPUS'])
+batch_size = 6 * int(os.environ['RWKV_NUM_GPUS'])
 assert (batch_size % int(os.environ['RWKV_NUM_GPUS']) == 0)
 
 # By default we are using exponential LR decay.
