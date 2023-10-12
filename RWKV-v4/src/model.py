@@ -289,6 +289,16 @@ class Block(nn.Module):
         self.config = config
         self.layer_id = layer_id
 
+        if self.config.downsample: 
+            one_third_layers = config.n_layer // 3
+            is_middle_layer = layer_id > one_third_layers and layer_id < (one_third_layers * 2)
+            self.downsample = is_middle_layer
+            self.N = 8
+        else:
+            self.downsample = False
+
+        print(f'layer {layer_id} downsample {self.downsample}'  )
+
         self.ln1 = nn.LayerNorm(config.n_embd)
         self.ln2 = nn.LayerNorm(config.n_embd)
 
@@ -303,6 +313,12 @@ class Block(nn.Module):
         self.ffn = RWKV_ChannelMix(config, layer_id)
 
     def forward(self, x):
+
+        og_shape = x.shape
+
+        if self.downsample:
+            x = x[:, ::self.N, :]
+
         if self.layer_id == 0:
             x = self.ln0(x)        
         if self.layer_id == 0 and self.config.model_type == 'RWKV-ffnPre':
@@ -310,6 +326,12 @@ class Block(nn.Module):
         else:
             x = x + self.att(self.ln1(x))
         x = x + self.ffn(self.ln2(x))
+
+        if self.downsample:
+            upsampled = torch.zeros(og_shape, device=x.device)
+            upsampled[:, ::self.N, :] = x
+            x = x + upsampled
+
         return x
 
 

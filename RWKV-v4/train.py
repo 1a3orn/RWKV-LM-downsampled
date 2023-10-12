@@ -182,7 +182,6 @@ elif datafile_encoding == 'numpy':
     train_dataset = Dataset(np.load(datafile).astype('int'), ctx_len, epoch_length_fixed)
 else:
     datas = open(datafile, "r", encoding=datafile_encoding).read(),
-    epoch_length_fixed = (len(datas) // ctx_len) // batch_size
     train_dataset = Dataset(datas, ctx_len, epoch_length_fixed)
 
 ########################################################################################################
@@ -205,6 +204,11 @@ if __name__ == '__main__':
     m_cfg.EPOCH_BEGIN = EPOCH_BEGIN
     m_cfg.LOAD_MODEL = LOAD_MODEL
     m_cfg.MODEL_NAME = MODEL_NAME
+   
+    if os.environ['RWKV_DOWNSAMPLE'] == '1'
+        m_cfg.downsample = True
+    else:
+        m_cfg.downsample = False
 
     if os.environ['RWKV_DEEPSPEED'] == '0':
         if os.environ['RWKV_FLOAT_MODE'] == 'fp16':
