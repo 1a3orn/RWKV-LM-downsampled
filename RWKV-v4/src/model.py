@@ -328,7 +328,7 @@ class Block(nn.Module):
         x = x + self.ffn(self.ln2(x))
 
         if self.downsample:
-            upsampled = torch.zeros_like(y)
+            upsampled = torch.zeros_like(res)
             upsampled[:, ::self.N, :] = x
             res = res + upsampled
             x = res
