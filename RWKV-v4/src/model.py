@@ -291,7 +291,7 @@ class Block(nn.Module):
 
         if self.config.downsample: 
             one_third_layers = config.n_layer // 3
-            is_middle_layer = layer_id > one_third_layers and layer_id < (one_third_layers * 2)
+            is_middle_layer = layer_id >= one_third_layers and layer_id <= config.n_layer - one_third_layers
             self.downsample = is_middle_layer
             self.N = 8
         else:
