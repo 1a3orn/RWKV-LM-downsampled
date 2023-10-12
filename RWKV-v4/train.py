@@ -205,7 +205,7 @@ if __name__ == '__main__':
     m_cfg.LOAD_MODEL = LOAD_MODEL
     m_cfg.MODEL_NAME = MODEL_NAME
    
-    if os.environ['RWKV_DOWNSAMPLE'] == '1'
+    if os.environ['RWKV_DOWNSAMPLE'] == '1':
         m_cfg.downsample = True
     else:
         m_cfg.downsample = False
