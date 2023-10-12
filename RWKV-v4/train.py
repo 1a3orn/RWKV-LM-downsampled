@@ -181,7 +181,9 @@ if datafile_encoding == 'binidx':
 elif datafile_encoding == 'numpy':
     train_dataset = Dataset(np.load(datafile).astype('int'), ctx_len, epoch_length_fixed)
 else:
-    train_dataset = Dataset(open(datafile, "r", encoding=datafile_encoding).read(), ctx_len, epoch_length_fixed)
+    datas = open(datafile, "r", encoding=datafile_encoding).read(),
+    epoch_length_fixed = (len(datas) // ctx_len) // batch_size
+    train_dataset = Dataset(datas, ctx_len, epoch_length_fixed)
 
 ########################################################################################################
 # Train model
