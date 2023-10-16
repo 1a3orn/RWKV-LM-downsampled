@@ -27,7 +27,7 @@ else:
 
 class TrainerConfig:
     batch_size = 64
-    learning_rate = 4e-4
+    learning_rate = 8e-4
     betas = (0.9, 0.99)
     eps = 1e-8
     grad_norm_clip = 1.0
